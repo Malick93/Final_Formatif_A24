@@ -66,6 +66,7 @@ public class MathBackgroundService : BackgroundService
         _currentQuestion.PlayerChoices[choice]++;
 
         // TODO: Notifier les clients qu'un joueur a choisi une réponse
+        _mathQuestionHub.Clients.All.SendAsync("IncreasePlayersChoices", userData.Choice);
     }
 
     private async Task EvaluateChoices()
