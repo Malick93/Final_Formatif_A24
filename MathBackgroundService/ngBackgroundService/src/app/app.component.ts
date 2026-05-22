@@ -24,6 +24,7 @@ interface MathQuestion {
   valueB: number;
   answers: number[];
   playerChoices: number[];
+  rightAnswerIndex: number;
 }
 
 interface PlayerInfoDTO {
@@ -120,6 +121,22 @@ export class AppComponent {
         if (this.currentQuestion) {
           this.currentQuestion.playerChoices[choiceIndex]++;
         }
+      });
+    });
+
+    this.hubConnection.on('CorrectAnswer', () => {
+      this.zone.run(() => {
+        this.nbRightAnswers++;
+        alert('Bonne réponse !');
+      });
+    });
+
+    this.hubConnection.on('WrongAnswer', () => {
+      this.zone.run(() => {
+        const rightAnswer = this.currentQuestion
+          ? this.currentQuestion.answers[this.currentQuestion.rightAnswerIndex]
+          : '?';
+        alert(`Mauvaise réponse ! La bonne réponse était ${rightAnswer}`);
       });
     });
 
